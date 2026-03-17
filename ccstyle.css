@@ -1,0 +1,114 @@
+/* Global Layout */
+h1,
+p {
+     text-align: center;
+}
+
+body {
+     font-family: sans-serif;
+     display: flex;
+     justify-content: space-around;
+     padding: 20px;
+     background-color: rgb(196, 164, 132);
+}
+
+#main-container {
+     display: flex;
+     flex-direction: column;
+     gap: 10px;
+     width: 100%;
+}
+
+#top-section {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     width: 100%;
+}
+
+#bottom-section {
+     display: flex;
+     justify-content: space-between;
+     width: 100%;
+}
+
+#left-section,
+#center-section,
+#right-section {
+     flex: 1;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     border: 2px dotted chocolate;
+}
+
+#total-chocolate {
+     font-size: 2rem;
+}
+
+/* Upgrade Row Styles */
+.upgrade-row {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     border: 5px solid black;
+     width: 25vw;
+     height: 85px;
+     /* Increased slightly for comfort */
+     padding: 5px 15px;
+     background-color: rgb(200, 200, 200);
+     cursor: pointer;
+     transition: 0.2s;
+     overflow: hidden;
+}
+
+/* Left Icon */
+.upgrade-icon {
+     height: 60px;
+     width: auto;
+     object-fit: contain;
+}
+
+/* Center Container (Title over Cost) */
+.cost-title-container {
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     flex-grow: 1;
+     margin-left: 15px;
+}
+
+.top-text {
+     font-size: 1.2rem;
+     margin: 0;
+     padding: 0;
+}
+
+/* Side-by-Side (Choco Icon + Price) */
+.side-by-side {
+     display: flex;
+     align-items: center;
+     gap: 8px;
+}
+
+.mini-choco {
+     height: 20px;
+     /* Small enough to fit with text */
+     width: auto;
+}
+
+.cost-text {
+     font-size: 1rem;
+     margin: 0;
+}
+
+/* Right Count */
+.count-display {
+     font-size: 2rem;
+     margin: 0;
+     opacity: 0.5;
+}
+
+#chocolatebarimage {
+     scale: 0.9;
+}

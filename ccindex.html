@@ -1,0 +1,74 @@
+<html lang="en">
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+     <link rel="stylesheet" href="ccstyle.css">
+
+     
+     <title>Chocolate Clicker</title>
+</head>
+<body>
+     <div id="main-container">
+          <div id="top-section">
+               <h1>Chocolate Clicker</h1>
+               <p>A game by Old Awesome</p>
+               <p>Click the Chocolate Bar to get chocolate</p>
+          </div>
+
+          <div id="bottom-section">
+               <div id="left-section">
+                    <h2 id="total-chocolate">Chocolate Count: <span id="chocolate-count">0</span></h2>
+                    <h3>Chocolate Per Second: <span id="chocolate-per-second-display">0</span></h3>
+                    <img id="chocolatebarimage" src="chocolatebar.png">
+                    <br>
+                    <h2>Version 1.1.0</h2>
+                    <a href="ccversion.html">Change Log</a>
+               </div>
+
+               <div id="center-section">
+                    <h2>Upgrades</h2>
+               </div>
+
+               <div id="right-section">
+                    <div id="chocolate-elves" class="upgrade-row">
+                         <img src="elficon.png" alt="" class="upgrade-icon">
+                         <div class="cost-title-container">
+                              <h2 class="top-text">Chocolate Elves</h2>
+                              <div class="side-by-side">
+                                   <img src="chocolatebar.png" class="mini-choco">
+                                   <h2 class="cost-text"><span id="chocolate-elf-cost">15</span></h2>
+                              </div>
+                         </div>
+                         <h2 class="count-display"><span id="chocolate-elves-count-value">0</span></h2>
+                    </div>
+               
+                    <div id="chocolate-dwarves" class="upgrade-row">
+                         <img src="dwarficon.png" alt="" class="upgrade-icon">
+                         <div class="cost-title-container">
+                              <h2 class="top-text">Chocolate Dwarves</h2>
+                              <div class="side-by-side">
+                                   <img src="chocolatebar.png" class="mini-choco">
+                                   <h2 class="cost-text"><span id="dwarves-cost">100</span></h2>
+                              </div>
+                         </div>
+                         <h2 class="count-display"><span id="dwarves-count-value">0</span></h2>
+                    </div>
+               
+                    <div id="chocolate-ogres" class="upgrade-row">
+                         <img src="ogreicon.png" alt="" class="upgrade-icon">
+                         <div class="cost-title-container">
+                              <h2 class="top-text">Chocolate Ogres</h2>
+                              <div class="side-by-side">
+                                   <img src="chocolatebar.png" class="mini-choco">
+                                   <h2 class="cost-text"><span id="ogres-cost">1100</span></h2>
+                              </div>
+                         </div>
+                         <h2 class="count-display"><span id="ogres-count-value">0</span></h2>
+                    </div>
+               </div>
+          </div>
+     </div>
+     <script src="ccscripts.js"></script>
+</body>
+</html>
