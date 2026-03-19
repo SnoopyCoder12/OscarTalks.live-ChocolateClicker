@@ -47,8 +47,24 @@ body {
 }
 
 /* Upgrade Row Styles */
-.upgrade-row {
+.upgrade-row-hidden {
+     display: none; /* Hidden by default, shown when player has enough chocolate */
+     align-items: center;
+     justify-content: space-between;
+     border: 5px solid black;
+     width: 25vw;
+     height: 85px;
+     /* Increased slightly for comfort */
+     padding: 5px 15px;
+     background-color: rgb(200, 200, 200);
+     cursor: pointer;
+     transition: 0.2s;
+     overflow: hidden;
+}
+
+.upgrade-row-shown {
      display: flex;
+     /* Hidden by default, shown when player has enough chocolate */
      align-items: center;
      justify-content: space-between;
      border: 5px solid black;
@@ -111,4 +127,36 @@ body {
 
 #chocolatebarimage {
      scale: 0.9;
+}
+
+/* Stats Popup */
+.overlay {
+     position: fixed;
+     top: 0;
+     left: 0;
+     width: 100%;
+     height: 100%;
+     background-color: rgba(0, 0, 0, 0.7);
+     backdrop-filter: blur(3px);
+     display: none;
+     z-index: 1;
+}
+
+/* Popup Styles */
+.popup {
+     background: white;
+     padding: 20px;
+     border-radius: 5px;
+     width: 300px;
+     position: fixed;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+     display: none;
+     z-index: 2;
+     text-align: center;
+}
+
+.show-popup {
+     display: block;
 }

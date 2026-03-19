@@ -1,4 +1,5 @@
 var chocolateCount = 0;
+var totalChocolateEarned = 0;
 let lastTimestamp = 0;
 
 var clickAddValue = 1;
@@ -6,19 +7,34 @@ var clickAddValue = 1;
 var elvescost = 15;
 var chocolateElves = 0;
 var elvesCPS = 0.1
+var elvesShowAt = 5;
 
 var dwarvescost = 100;
 var dwarvesCount = 0;
 var dwarvesCPS = 1;
+var dwarvesShowAt = 100;
 
 var ogrescost = 1100;
 var ogresCount = 0;
 var ogresCPS = 8;
+var ogresShowAt = 1100;
+
+var goblinscost = 12000;
+var goblinsCount = 0;
+var goblinsCPS = 47;
+var goblinsShowAt = 12000;
 
 var chocolatepersecond = 0;
 
 const chocolateButton = document.getElementById("chocolatebarimage");
 const counterDisplay = document.getElementById("chocolate-count");
+
+const openStatsButton = document.getElementById("open-stats-button");
+const closeStatsButton = document.getElementById("close-stats-button");
+const overlay = document.getElementById("overlay");
+const popup = document.getElementById("popup");
+
+const totalChocolateEarnedDisplay = document.getElementById("total-chocolate-earned");
 
 const elves = document.getElementById("chocolate-elves");
 const chocolateElvesCountDisplay = document.getElementById("chocolate-elves-count-value");
@@ -31,6 +47,10 @@ const dwarvesCostDisplay = document.getElementById("dwarves-cost");
 const ogres = document.getElementById("chocolate-ogres");
 const ogresCountDisplay = document.getElementById("ogres-count-value");
 const ogresCostDisplay = document.getElementById("ogres-cost");
+
+const goblins = document.getElementById("chocolate-goblins");
+const goblinsCountDisplay = document.getElementById("goblins-count-value");
+const goblinsCostDisplay = document.getElementById("goblins-cost");
 
 const cpsDisplay = document.getElementById("chocolate-per-second-display");
 
@@ -47,9 +67,28 @@ const timingOptions = {
      fill: "forwards",
 };
 
+function showCreatures(element) {
+     if (element) {
+          element.classList.remove("upgrade-row-hidden");
+          element.classList.add("upgrade-row-shown");
+     }
+}
+
+function openStats() {
+     totalChocolateEarnedDisplay.textContent = Math.floor(totalChocolateEarned).toLocaleString();
+     popup.classList.add('show-popup');
+     overlay.classList.add('show-popup');
+}
+
+function closeStats() {
+     popup.classList.remove('show-popup');
+     overlay.classList.remove('show-popup');
+}
+
 function addChocolate() {
      chocolateButton.animate(scaleKeyframes, timingOptions);
      chocolateCount += clickAddValue;
+     totalChocolateEarned += clickAddValue;
      counterDisplay.textContent = chocolateCount;
 }
 
@@ -95,6 +134,20 @@ function buyOgre() {
      }
 }
 
+function buyGoblin() {
+     if (chocolateCount >= goblinscost) {
+          chocolateCount -= goblinscost;
+          goblinsCount++;
+          chocolatepersecond += goblinsCPS;
+          goblinsCountDisplay.textContent = goblinsCount;
+          counterDisplay.textContent = chocolateCount;
+          cpsDisplay.textContent = chocolatepersecond;
+          goblinscost = Math.floor(goblinscost * 1.15);
+          goblinscost = Math.round(goblinscost);
+          goblinsCostDisplay.textContent = goblinscost;
+     }
+}
+
 function update(timestamp) {
      // Make the building be a darker color if the player can't afford it, and normal color if they can with the text red.
      if (chocolateCount < elvescost) {
@@ -103,6 +156,10 @@ function update(timestamp) {
      } else if (chocolateCount >= elvescost) {
           elves.style.backgroundColor = "rgb(200, 200, 200)";
           elves.style.color = "black";
+     }
+
+     if (totalChocolateEarned >= elvesShowAt) {
+          showCreatures(elves);
      }
 
      // Now do the same for dwarves
@@ -114,6 +171,10 @@ function update(timestamp) {
           dwarves.style.color = "black";
      }
 
+     if (totalChocolateEarned >= dwarvesShowAt) {
+          showCreatures(dwarves);
+     }
+
      // And for ogres     
      if (chocolateCount < ogrescost) {
           ogres.style.backgroundColor = "rgb(100, 100, 100)";
@@ -121,6 +182,23 @@ function update(timestamp) {
      } else if (chocolateCount >= ogrescost) {
           ogres.style.backgroundColor = "rgb(200, 200, 200)";
           ogres.style.color = "black";
+     }
+
+     if (totalChocolateEarned >= ogresShowAt) {
+          showCreatures(ogres);
+     }
+
+     // And for goblins
+     if (chocolateCount < goblinscost) {
+          goblins.style.backgroundColor = "rgb(100, 100, 100)";
+          goblins.style.color = "red";
+     } else if (chocolateCount >= goblinscost) {
+          goblins.style.backgroundColor = "rgb(200, 200, 200)";
+          goblins.style.color = "black";
+     }
+
+     if (totalChocolateEarned >= goblinsShowAt) {
+          showCreatures(goblins);
      }
 
      // This will round the CPS to 1 decimal place for display, but keep the full precision for calculations
@@ -133,6 +211,7 @@ function update(timestamp) {
 
      // 2. Add the fractional amount of chocolate
      chocolateCount += chocolatepersecond * deltaTime;
+     totalChocolateEarned += chocolatepersecond * deltaTime;
 
      // 3. Update the display (rounding to the whole number for the user)
      counterDisplay.innerText = Math.floor(chocolateCount).toLocaleString();
@@ -146,5 +225,10 @@ chocolateButton.addEventListener("click", addChocolate);
 elves.addEventListener("click", buyChocolateElf);
 dwarves.addEventListener("click", buyDwarf);
 ogres.addEventListener("click", buyOgre);
+goblins.addEventListener("click", buyGoblin);
+
+openStatsButton.addEventListener("click", openStats);
+closeStatsButton.addEventListener("click", closeStats);
+overlay.addEventListener("click", closeStats);
 
 requestAnimationFrame(update);

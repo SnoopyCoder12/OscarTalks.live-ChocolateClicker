@@ -14,6 +14,16 @@
                <h1>Chocolate Clicker</h1>
                <p>A game by Old Awesome</p>
                <p>Click the Chocolate Bar to get chocolate</p>
+
+               <button id="open-stats-button">Stats</button>
+
+               <div class="overlay" id="overlay"></div>
+
+               <div class="popup" id="popup">
+                    <h2>Stats</h2>
+                    <p>Total Chocolate Earned: <span id="total-chocolate-earned">0</span></p>
+                    <button id="close-stats-button">Close</button>
+               </div>
           </div>
 
           <div id="bottom-section">
@@ -22,7 +32,7 @@
                     <h3>Chocolate Per Second: <span id="chocolate-per-second-display">0</span></h3>
                     <img id="chocolatebarimage" src="chocolatebar.png">
                     <br>
-                    <h2>Version 1.1.0</h2>
+                    <h2>Version 1.2.0</h2>
                     <a href="\version\index.html">Change Log</a>
                </div>
 
@@ -31,7 +41,7 @@
                </div>
 
                <div id="right-section">
-                    <div id="chocolate-elves" class="upgrade-row">
+                    <div id="chocolate-elves" class="upgrade-row-hidden">
                          <img src="elficon.png" alt="" class="upgrade-icon">
                          <div class="cost-title-container">
                               <h2 class="top-text">Chocolate Elves</h2>
@@ -43,7 +53,7 @@
                          <h2 class="count-display"><span id="chocolate-elves-count-value">0</span></h2>
                     </div>
                
-                    <div id="chocolate-dwarves" class="upgrade-row">
+                    <div id="chocolate-dwarves" class="upgrade-row-hidden">
                          <img src="dwarficon.png" alt="" class="upgrade-icon">
                          <div class="cost-title-container">
                               <h2 class="top-text">Chocolate Dwarves</h2>
@@ -55,7 +65,7 @@
                          <h2 class="count-display"><span id="dwarves-count-value">0</span></h2>
                     </div>
                
-                    <div id="chocolate-ogres" class="upgrade-row">
+                    <div id="chocolate-ogres" class="upgrade-row-hidden">
                          <img src="ogreicon.png" alt="" class="upgrade-icon">
                          <div class="cost-title-container">
                               <h2 class="top-text">Chocolate Ogres</h2>
@@ -65,6 +75,18 @@
                               </div>
                          </div>
                          <h2 class="count-display"><span id="ogres-count-value">0</span></h2>
+                    </div>
+
+                    <div id="chocolate-goblins" class="upgrade-row-hidden">
+                         <img src="goblinicon.png" alt="" class="upgrade-icon">
+                         <div class="cost-title-container">
+                              <h2 class="top-text">Chocolate Goblins</h2>
+                              <div class="side-by-side">
+                                   <img src="chocolatebar.png" class="mini-choco">
+                                   <h2 class="cost-text"><span id="goblins-cost">12000</span></h2>
+                              </div>
+                         </div>
+                         <h2 class="count-display"><span id="goblins-count-value">0</span></h2>
                     </div>
                </div>
           </div>
