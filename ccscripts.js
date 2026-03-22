@@ -55,6 +55,7 @@ const goblinsCountDisplay = document.getElementById("goblins-count-value");
 const goblinsCostDisplay = document.getElementById("goblins-cost");
 
 const cpsDisplay = document.getElementById("chocolate-per-second-display");
+const gameTitleChocolateDisplay = document.getElementById("game-title-chocolate");
 
 const resetButton = document.getElementById("reset-button");
 
@@ -321,6 +322,7 @@ function update(timestamp) {
 
      // 3. Update the display (rounding to the whole number for the user)
      counterDisplay.innerText = Math.floor(chocolateCount).toLocaleString();
+     document.title = `${Math.floor(chocolateCount).toLocaleString()} Chocolate - Chocolate Clicker`;
 
      // 4. Request the next frame
      requestAnimationFrame(update);
