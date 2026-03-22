@@ -26,6 +26,8 @@ var goblinsShowAt = 12000;
 
 var chocolatepersecond = 0;
 
+var tenseconds = 0;
+
 const chocolateButton = document.getElementById("chocolatebarimage");
 const counterDisplay = document.getElementById("chocolate-count");
 
@@ -54,6 +56,8 @@ const goblinsCostDisplay = document.getElementById("goblins-cost");
 
 const cpsDisplay = document.getElementById("chocolate-per-second-display");
 
+const resetButton = document.getElementById("reset-button");
+
 const scaleKeyframes = [
      { transform: "scale(1)" },
      { transform: "scale(0.8)" },
@@ -66,6 +70,88 @@ const timingOptions = {
      easing: "ease-in-out",
      fill: "forwards",
 };
+
+function loadGame() {
+     const savedData = localStorage.getItem("chocolateClickerSave");
+     if (savedData) {
+          const saveData = JSON.parse(savedData);
+          chocolateCount = saveData.chocolateCount || 0;
+          totalChocolateEarned = saveData.totalChocolateEarned || 0;
+          chocolatepersecond = saveData.chocolatepersecond || 0;
+          chocolateElves = saveData.chocolateElves || 0;
+          dwarvesCount = saveData.dwarvesCount || 0;
+          ogresCount = saveData.ogresCount || 0;
+          goblinsCount = saveData.goblinsCount || 0;
+          elvescost = saveData.elvescost || 15;
+          dwarvescost = saveData.dwarvescost || 100;
+          ogrescost = saveData.ogrescost || 1100;
+          goblinscost = saveData.goblinscost || 12000;
+
+          // Update the UI
+          counterDisplay.textContent = Math.floor(chocolateCount).toLocaleString();
+          cpsDisplay.textContent = Math.round(chocolatepersecond * 10) / 10;
+          
+          chocolateElvesCountDisplay.textContent = chocolateElves;
+          chocolateElfCostDisplay.textContent = elvescost;
+
+          dwarvesCountDisplay.textContent = dwarvesCount;
+          dwarvesCostDisplay.textContent = dwarvescost;
+
+          ogresCountDisplay.textContent = ogresCount;
+          ogresCostDisplay.textContent = ogrescost;
+
+          goblinsCountDisplay.textContent = goblinsCount;
+          goblinsCostDisplay.textContent = goblinscost;
+     }
+}
+
+function exportSave() {
+     prompt("Copy your save data below:", localStorage.getItem("chocolateClickerSave"));
+}
+
+function importSave() {
+     const saveDataString = prompt("Paste your save data below:");
+     if (saveDataString) {
+          savedData = saveDataString;
+          if (savedData) {
+               const saveData = JSON.parse(savedData);
+               chocolateCount = saveData.chocolateCount || 0;
+               totalChocolateEarned = saveData.totalChocolateEarned || 0;
+               chocolatepersecond = saveData.chocolatepersecond || 0;
+               chocolateElves = saveData.chocolateElves || 0;
+               dwarvesCount = saveData.dwarvesCount || 0;
+               ogresCount = saveData.ogresCount || 0;
+               goblinsCount = saveData.goblinsCount || 0;
+               elvescost = saveData.elvescost || 15;
+               dwarvescost = saveData.dwarvescost || 100;
+               ogrescost = saveData.ogrescost || 1100;
+               goblinscost = saveData.goblinscost || 12000;
+
+               // Update the UI
+               counterDisplay.textContent = Math.floor(chocolateCount).toLocaleString();
+               cpsDisplay.textContent = Math.round(chocolatepersecond * 10) / 10;
+
+               chocolateElvesCountDisplay.textContent = chocolateElves;
+               chocolateElfCostDisplay.textContent = elvescost;
+
+               dwarvesCountDisplay.textContent = dwarvesCount;
+               dwarvesCostDisplay.textContent = dwarvescost;
+
+               ogresCountDisplay.textContent = ogresCount;
+               ogresCostDisplay.textContent = ogrescost;
+
+               goblinsCountDisplay.textContent = goblinsCount;
+               goblinsCostDisplay.textContent = goblinscost;
+          }
+     }
+}
+
+function resetGame() {
+     if (confirm("Are you sure you want to reset your progress? This cannot be undone.")) {
+          localStorage.removeItem("chocolateClickerSave");
+          location.reload();
+     }
+}
 
 function showCreatures(element) {
      if (element) {
@@ -149,6 +235,26 @@ function buyGoblin() {
 }
 
 function update(timestamp) {
+     tenseconds += 1;
+
+     if (tenseconds >= 240) {
+          const saveData = {
+               chocolateCount: chocolateCount,
+               totalChocolateEarned: totalChocolateEarned,
+               chocolatepersecond: chocolatepersecond,
+               chocolateElves: chocolateElves,
+               dwarvesCount: dwarvesCount,
+               ogresCount: ogresCount,
+               goblinsCount: goblinsCount,
+               elvescost: elvescost,
+               dwarvescost: dwarvescost,
+               ogrescost: ogrescost,
+               goblinscost: goblinscost
+          };
+          localStorage.setItem("chocolateClickerSave", JSON.stringify(saveData));
+          tenseconds = 0;
+     }
+     
      // Make the building be a darker color if the player can't afford it, and normal color if they can with the text red.
      if (chocolateCount < elvescost) {
           elves.style.backgroundColor = "rgb(100, 100, 100)";
@@ -230,5 +336,8 @@ goblins.addEventListener("click", buyGoblin);
 openStatsButton.addEventListener("click", openStats);
 closeStatsButton.addEventListener("click", closeStats);
 overlay.addEventListener("click", closeStats);
+resetButton.addEventListener("click", resetGame);
+
+loadGame();
 
 requestAnimationFrame(update);

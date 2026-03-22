@@ -15,6 +15,9 @@
                <p>A game by Old Awesome</p>
                <p>Click the Chocolate Bar to get chocolate</p>
 
+               <button onclick="exportSave()" id="export-save">Export Save</button>
+               <button onclick="importSave()" id="import-save">Import Save</button>
+
                <button id="open-stats-button">Stats</button>
 
                <div class="overlay" id="overlay"></div>
@@ -22,6 +25,9 @@
                <div class="popup" id="popup">
                     <h2>Stats</h2>
                     <p>Total Chocolate Earned: <span id="total-chocolate-earned">0</span></p>
+                    <br>
+                    <button id="reset-button">Reset Game</button>
+                    <br>
                     <button id="close-stats-button">Close</button>
                </div>
           </div>
@@ -32,7 +38,7 @@
                     <h3>Chocolate Per Second: <span id="chocolate-per-second-display">0</span></h3>
                     <img id="chocolatebarimage" src="chocolatebar.png">
                     <br>
-                    <h2>Version 1.2.0</h2>
+                    <h2>Version 1.3.0</h2>
                     <a href="\version\index.html">Change Log</a>
                </div>
 
