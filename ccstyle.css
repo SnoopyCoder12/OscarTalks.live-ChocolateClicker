@@ -79,7 +79,7 @@ body {
 }
 
 /* Left Icon */
-.upgrade-icon {
+.creature-icon {
      height: 60px;
      width: auto;
      object-fit: contain;
@@ -159,4 +159,66 @@ body {
 
 .show-popup {
      display: block;
+}
+
+/* The icon for the upgrades in the upgrade shop */
+.upgrade-icon {
+     visibility: hidden; /* Hidden by default, shown when player has enough chocolate */
+     position: relative;
+     height: 60px;
+     width: 60px;
+     background-color: #666;
+     border: 2px solid #888;
+     cursor: pointer;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+}
+
+/* The info box which is hidden by default and shows when the player hovers over the upgrade icon */
+.upgrade-tooltip {
+     visibility: hidden;
+     position: absolute;
+     right: 70px;
+     top: 0;
+     width: 250px;
+     background-color: #111;
+     border: 2px solid var(--accent-color);
+     padding: 10px;
+     z-index: 10; /* Ensure it appears above other elements */
+     pointer-events: none; /* Prevent it from interfering with mouse events */
+}
+
+/* Show the tooltip when hovering over the upgrade icon */
+.upgrade-icon:hover .upgrade-tooltip {
+     visibility: visible;
+}
+
+/* Tooltip text styles */
+.tooltip-header{
+     display: flex;
+     justify-content: space-between;
+     border-bottom: 1px solid #444;
+     margin-bottom: 5px;
+     padding-bottom: 5px;
+     color: #f1c40f;
+     font-weight: bold;
+}
+
+.upgrade-description {
+     font-size: 0.9rem;
+     color: #ccc;
+}
+
+.upgrade-quote {
+     font-style: italic;
+     font-size: 0.8rem;
+     color: #888;
+     margin-top: 5px;
+}
+
+.upgrade-image {
+     width: 60px;
+     height: 60px;
+     object-fit: contain;
 }

@@ -28,6 +28,13 @@ var chocolatepersecond = 0;
 
 var tenseconds = 0;
 
+// All upgrade related variables
+var gamerMouseUpgradeCost = 50;
+var gamerMouseUpgradeShowAt = 25;
+const gamerMouse = document.getElementById("gamermouse-upgrade");
+
+// Get references to all the necessary DOM elements
+
 const chocolateButton = document.getElementById("chocolatebarimage");
 const counterDisplay = document.getElementById("chocolate-count");
 
@@ -179,6 +186,17 @@ function addChocolate() {
      counterDisplay.textContent = chocolateCount;
 }
 
+// All upgrade functions
+function buyGamerMouseUpgrade() {
+     if (chocolateCount >= gamerMouseUpgradeCost) {
+          chocolateCount -= gamerMouseUpgradeCost;
+          clickAddValue *= 2;
+          gamerMouse.style.display = "none";
+     }
+}
+
+
+
 function buyChocolateElf() {
      if (chocolateCount >= elvescost) {
           chocolateCount -= elvescost;
@@ -254,6 +272,17 @@ function update(timestamp) {
           };
           localStorage.setItem("chocolateClickerSave", JSON.stringify(saveData));
           tenseconds = 0;
+     }
+
+     //All Upgrade related updates
+     if (totalChocolateEarned >= gamerMouseUpgradeShowAt) {
+          gamerMouse.style.visibility = "visible";
+     }
+
+     if (chocolateCount < gamerMouseUpgradeCost) {
+          gamerMouse.style.filter = "brightness(50%) grayscale(100%)";
+     } else {
+          gamerMouse.style.filter = "none";
      }
      
      // Make the building be a darker color if the player can't afford it, and normal color if they can with the text red.
@@ -334,6 +363,8 @@ elves.addEventListener("click", buyChocolateElf);
 dwarves.addEventListener("click", buyDwarf);
 ogres.addEventListener("click", buyOgre);
 goblins.addEventListener("click", buyGoblin);
+
+gamerMouse.addEventListener("click", buyGamerMouseUpgrade);
 
 openStatsButton.addEventListener("click", openStats);
 closeStatsButton.addEventListener("click", closeStats);
