@@ -2,6 +2,8 @@ var chocolateCount = 0;
 var totalChocolateEarned = 0;
 let lastTimestamp = 0;
 
+var totalChocolateClicks = 0;
+
 var clickAddValue = 1;
 
 var elvescost = 15;
@@ -33,10 +35,15 @@ var gamerMouseUpgradeCost = 50;
 var gamerMouseUpgradeShowAt = 25;
 const gamerMouse = document.getElementById("gamermouse-upgrade");
 
-// Get references to all the necessary DOM elements
+var twoDofxmasUpgradeCost = 50;
+var twoDofxmasUpgradeShowAt = 25;
+const twoDofxmas = document.getElementById("twodaysxmas-upgrade");
 
+// Get references to all the necessary DOM elements
 const chocolateButton = document.getElementById("chocolatebarimage");
 const counterDisplay = document.getElementById("chocolate-count");
+
+const totalClicksDisplay = document.getElementById("total-clicks");
 
 const openStatsButton = document.getElementById("open-stats-button");
 const closeStatsButton = document.getElementById("close-stats-button");
@@ -182,6 +189,8 @@ function closeStats() {
 function addChocolate() {
      chocolateButton.animate(scaleKeyframes, timingOptions);
      chocolateCount += clickAddValue;
+     totalChocolateClicks += 1;
+     totalClicksDisplay.textContent = totalChocolateClicks;
      totalChocolateEarned += clickAddValue;
      counterDisplay.textContent = chocolateCount;
 }
@@ -195,13 +204,23 @@ function buyGamerMouseUpgrade() {
      }
 }
 
+function buyTwoDofXmasUpgrade() {
+     if (chocolateCount >= twoDofxmasUpgradeCost) {
+          chocolateCount -= twoDofxmasUpgradeCost;
+          elvesCPS *= 2;
+          chocolatepersecond = chocolateElves * elvesCPS + dwarvesCount * dwarvesCPS + ogresCount * ogresCPS + goblinsCount * goblinsCPS;
+          cpsDisplay.textContent = chocolatepersecond;
+          twoDofxmas.style.display = "none";
+     }
+}
+
+
 
 
 function buyChocolateElf() {
      if (chocolateCount >= elvescost) {
           chocolateCount -= elvescost;
           chocolateElves++;
-          chocolatepersecond += elvesCPS;
           chocolateElvesCountDisplay.textContent = chocolateElves;
           counterDisplay.textContent = chocolateCount;
           cpsDisplay.textContent = chocolatepersecond;
@@ -215,7 +234,6 @@ function buyDwarf() {
      if (chocolateCount >= dwarvescost) {
           chocolateCount -= dwarvescost;
           dwarvesCount++;
-          chocolatepersecond += dwarvesCPS;
           dwarvesCountDisplay.textContent = dwarvesCount;
           counterDisplay.textContent = chocolateCount;
           cpsDisplay.textContent = chocolatepersecond;
@@ -229,7 +247,6 @@ function buyOgre() {
      if (chocolateCount >= ogrescost) {
           chocolateCount -= ogrescost;
           ogresCount++;
-          chocolatepersecond += ogresCPS;
           ogresCountDisplay.textContent = ogresCount;
           counterDisplay.textContent = chocolateCount;
           cpsDisplay.textContent = chocolatepersecond;
@@ -243,7 +260,6 @@ function buyGoblin() {
      if (chocolateCount >= goblinscost) {
           chocolateCount -= goblinscost;
           goblinsCount++;
-          chocolatepersecond += goblinsCPS;
           goblinsCountDisplay.textContent = goblinsCount;
           counterDisplay.textContent = chocolateCount;
           cpsDisplay.textContent = chocolatepersecond;
@@ -283,6 +299,16 @@ function update(timestamp) {
           gamerMouse.style.filter = "brightness(50%) grayscale(100%)";
      } else {
           gamerMouse.style.filter = "none";
+     }
+
+     if (totalChocolateEarned >= twoDofxmasUpgradeShowAt) {
+          twoDofxmas.style.visibility = "visible";
+     }
+
+     if (chocolateCount < twoDofxmasUpgradeCost) {
+          twoDofxmas.style.filter = "brightness(50%) grayscale(100%)";
+     } else {
+          twoDofxmas.style.filter = "none";
      }
      
      // Make the building be a darker color if the player can't afford it, and normal color if they can with the text red.
@@ -338,6 +364,7 @@ function update(timestamp) {
      }
 
      // This will round the CPS to 1 decimal place for display, but keep the full precision for calculations
+     chocolatepersecond = chocolateElves * elvesCPS + dwarvesCount * dwarvesCPS + ogresCount * ogresCPS + goblinsCount * goblinsCPS;
      cpsDisplay.textContent = Math.round(chocolatepersecond * 10) / 10;
 
      // 1. Calculate how much time has passed since last frame
@@ -365,6 +392,7 @@ ogres.addEventListener("click", buyOgre);
 goblins.addEventListener("click", buyGoblin);
 
 gamerMouse.addEventListener("click", buyGamerMouseUpgrade);
+twoDofxmas.addEventListener("click", buyTwoDofXmasUpgrade);
 
 openStatsButton.addEventListener("click", openStats);
 closeStatsButton.addEventListener("click", closeStats);
