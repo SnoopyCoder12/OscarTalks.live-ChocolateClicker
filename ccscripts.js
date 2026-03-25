@@ -34,10 +34,16 @@ var tenseconds = 0;
 var gamerMouseUpgradeCost = 50;
 var gamerMouseUpgradeShowAt = 25;
 const gamerMouse = document.getElementById("gamermouse-upgrade");
+var gamerMouseUpgradePurchased = false;
 
 var twoDofxmasUpgradeCost = 50;
 var twoDofxmasUpgradeShowAt = 25;
 const twoDofxmas = document.getElementById("twodaysxmas-upgrade");
+var twoDofxmasUpgradePurchased = false;
+
+var reinforcedPickaxesUpgradeCost = 1000;
+const reinforcedPickaxes = document.getElementById("reinforcedpickaxes-upgrade");
+var reinforcedPickaxesUpgradePurchased = false;
 
 // Get references to all the necessary DOM elements
 const chocolateButton = document.getElementById("chocolatebarimage");
@@ -86,37 +92,81 @@ const timingOptions = {
      fill: "forwards",
 };
 
+function applyGameData(saveData) {
+     // Validate the data structure
+     if (!saveData || typeof saveData !== "object") {
+          return false;
+     }
+
+     // Load all game state with defaults
+     chocolateCount = saveData.chocolateCount ?? 0;
+     totalChocolateEarned = saveData.totalChocolateEarned ?? 0;
+     totalChocolateClicks = saveData.totalChocolateClicks ?? 0;
+
+     chocolateElves = saveData.chocolateElves ?? 0;
+     dwarvesCount = saveData.dwarvesCount ?? 0;
+     ogresCount = saveData.ogresCount ?? 0;
+     goblinsCount = saveData.goblinsCount ?? 0;
+
+     elvescost = saveData.elvescost ?? 15;
+     dwarvescost = saveData.dwarvescost ?? 100;
+     ogrescost = saveData.ogrescost ?? 1100;
+     goblinscost = saveData.goblinscost ?? 12000;
+
+     gamerMouseUpgradePurchased = saveData.gamerMouseUpgradePurchased ?? false;
+     twoDofxmasUpgradePurchased = saveData.twoDofxmasUpgradePurchased ?? false;
+     reinforcedPickaxesUpgradePurchased = saveData.reinforcedPickaxesUpgradePurchased ?? false;
+
+     if (gamerMouseUpgradePurchased) {
+          clickAddValue *= 2;
+          gamerMouse.style.display = "none";
+     }
+
+     if (twoDofxmasUpgradePurchased) {
+          elvesCPS *= 2;
+          twoDofxmas.style.display = "none";
+     }
+
+     if (reinforcedPickaxesUpgradePurchased) {
+          dwarvesCPS *= 2;
+          reinforcedPickaxes.style.display = "none";
+     }
+
+     // Recalculate CPS based on loaded data
+     chocolatepersecond = chocolateElves * elvesCPS + dwarvesCount * dwarvesCPS + ogresCount * ogresCPS + goblinsCount * goblinsCPS;
+     updateGameDisplay();
+     return true;
+}
+
+function updateGameDisplay() {
+     counterDisplay.textContent = Math.floor(chocolateCount).toLocaleString();
+     totalChocolateEarnedDisplay.textContent = Math.floor(totalChocolateEarned).toLocaleString();
+     totalClicksDisplay.textContent = Math.floor(totalChocolateClicks).toLocaleString();
+
+     chocolateElvesCountDisplay.textContent = chocolateElves;
+     chocolateElfCostDisplay.textContent = elvescost;
+     dwarvesCountDisplay.textContent = dwarvesCount;
+     dwarvesCostDisplay.textContent = dwarvescost;
+     ogresCountDisplay.textContent = ogresCount;
+     ogresCostDisplay.textContent = ogrescost;
+     goblinsCountDisplay.textContent = goblinsCount;
+     goblinsCostDisplay.textContent = goblinscost;
+
+     document.title = `${Math.floor(chocolateCount).toLocaleString()} Chocolate - Chocolate Clicker`;
+}
+
+
+
 function loadGame() {
-     const savedData = localStorage.getItem("chocolateClickerSave");
-     if (savedData) {
-          const saveData = JSON.parse(savedData);
-          chocolateCount = saveData.chocolateCount || 0;
-          totalChocolateEarned = saveData.totalChocolateEarned || 0;
-          chocolatepersecond = saveData.chocolatepersecond || 0;
-          chocolateElves = saveData.chocolateElves || 0;
-          dwarvesCount = saveData.dwarvesCount || 0;
-          ogresCount = saveData.ogresCount || 0;
-          goblinsCount = saveData.goblinsCount || 0;
-          elvescost = saveData.elvescost || 15;
-          dwarvescost = saveData.dwarvescost || 100;
-          ogrescost = saveData.ogrescost || 1100;
-          goblinscost = saveData.goblinscost || 12000;
-
-          // Update the UI
-          counterDisplay.textContent = Math.floor(chocolateCount).toLocaleString();
-          cpsDisplay.textContent = Math.round(chocolatepersecond * 10) / 10;
-          
-          chocolateElvesCountDisplay.textContent = chocolateElves;
-          chocolateElfCostDisplay.textContent = elvescost;
-
-          dwarvesCountDisplay.textContent = dwarvesCount;
-          dwarvesCostDisplay.textContent = dwarvescost;
-
-          ogresCountDisplay.textContent = ogresCount;
-          ogresCostDisplay.textContent = ogrescost;
-
-          goblinsCountDisplay.textContent = goblinsCount;
-          goblinsCostDisplay.textContent = goblinscost;
+     try {
+          const savedData = localStorage.getItem("chocolateClickerSave");
+          if (savedData) {
+               const saveData = JSON.parse(savedData);
+               applyGameData(saveData);
+          }
+     } catch (error) {
+          console.error("Error loading game data:", error);
+          localStorage.removeItem("chocolateClickerSave"); //Clear the corrupted save data
      }
 }
 
@@ -126,38 +176,18 @@ function exportSave() {
 
 function importSave() {
      const saveDataString = prompt("Paste your save data below:");
-     if (saveDataString) {
-          savedData = saveDataString;
-          if (savedData) {
-               const saveData = JSON.parse(savedData);
-               chocolateCount = saveData.chocolateCount || 0;
-               totalChocolateEarned = saveData.totalChocolateEarned || 0;
-               chocolatepersecond = saveData.chocolatepersecond || 0;
-               chocolateElves = saveData.chocolateElves || 0;
-               dwarvesCount = saveData.dwarvesCount || 0;
-               ogresCount = saveData.ogresCount || 0;
-               goblinsCount = saveData.goblinsCount || 0;
-               elvescost = saveData.elvescost || 15;
-               dwarvescost = saveData.dwarvescost || 100;
-               ogrescost = saveData.ogrescost || 1100;
-               goblinscost = saveData.goblinscost || 12000;
+     if (!saveDataString) return;
 
-               // Update the UI
-               counterDisplay.textContent = Math.floor(chocolateCount).toLocaleString();
-               cpsDisplay.textContent = Math.round(chocolatepersecond * 10) / 10;
-
-               chocolateElvesCountDisplay.textContent = chocolateElves;
-               chocolateElfCostDisplay.textContent = elvescost;
-
-               dwarvesCountDisplay.textContent = dwarvesCount;
-               dwarvesCostDisplay.textContent = dwarvescost;
-
-               ogresCountDisplay.textContent = ogresCount;
-               ogresCostDisplay.textContent = ogrescost;
-
-               goblinsCountDisplay.textContent = goblinsCount;
-               goblinsCostDisplay.textContent = goblinscost;
+     try {
+          const saveData = JSON.parse(saveDataString);
+          if (applyGameData(saveData)) {
+               alert("Save data imported successfully!");
+          } else {
+               alert("Invalid save data format.");
           }
+     } catch (error) {
+          console.error("Error importing save data:", error);
+          alert("Failed to import save data. Make sure you copied it correctly.");
      }
 }
 
@@ -199,6 +229,7 @@ function addChocolate() {
 function buyGamerMouseUpgrade() {
      if (chocolateCount >= gamerMouseUpgradeCost) {
           chocolateCount -= gamerMouseUpgradeCost;
+          gamerMouseUpgradePurchased = true;
           clickAddValue *= 2;
           gamerMouse.style.display = "none";
      }
@@ -207,14 +238,24 @@ function buyGamerMouseUpgrade() {
 function buyTwoDofXmasUpgrade() {
      if (chocolateCount >= twoDofxmasUpgradeCost) {
           chocolateCount -= twoDofxmasUpgradeCost;
+          twoDofxmasUpgradePurchased = true;
           elvesCPS *= 2;
           chocolatepersecond = chocolateElves * elvesCPS + dwarvesCount * dwarvesCPS + ogresCount * ogresCPS + goblinsCount * goblinsCPS;
-          cpsDisplay.textContent = chocolatepersecond;
+          cpsDisplay.textContent = Math.round(chocolatepersecond * 10) / 10;
           twoDofxmas.style.display = "none";
      }
 }
 
-
+function buyReinforcedPickaxesUpgrade() {
+     if (chocolateCount >= reinforcedPickaxesUpgradeCost) {
+          chocolateCount -= reinforcedPickaxesUpgradeCost;
+          reinforcedPickaxesUpgradePurchased = true;
+          dwarvesCPS *= 2;
+          chocolatepersecond = chocolateElves * elvesCPS + dwarvesCount * dwarvesCPS + ogresCount * ogresCPS + goblinsCount * goblinsCPS;
+          cpsDisplay.textContent = Math.round(chocolatepersecond * 10) / 10;
+          reinforcedPickaxes.style.display = "none";
+     }
+}
 
 
 function buyChocolateElf() {
@@ -276,7 +317,7 @@ function update(timestamp) {
           const saveData = {
                chocolateCount: chocolateCount,
                totalChocolateEarned: totalChocolateEarned,
-               chocolatepersecond: chocolatepersecond,
+               totalChocolateClicks: totalChocolateClicks,
                chocolateElves: chocolateElves,
                dwarvesCount: dwarvesCount,
                ogresCount: ogresCount,
@@ -284,14 +325,17 @@ function update(timestamp) {
                elvescost: elvescost,
                dwarvescost: dwarvescost,
                ogrescost: ogrescost,
-               goblinscost: goblinscost
+               goblinscost: goblinscost,
+               twoDofxmasUpgradePurchased: twoDofxmasUpgradePurchased,
+               gamerMouseUpgradePurchased: gamerMouseUpgradePurchased,
+               reinforcedPickaxesUpgradePurchased: reinforcedPickaxesUpgradePurchased
           };
           localStorage.setItem("chocolateClickerSave", JSON.stringify(saveData));
           tenseconds = 0;
      }
 
      //All Upgrade related updates
-     if (totalChocolateEarned >= gamerMouseUpgradeShowAt) {
+     if (totalChocolateEarned >= gamerMouseUpgradeShowAt && totalChocolateClicks >= 25) {
           gamerMouse.style.visibility = "visible";
      }
 
@@ -301,7 +345,7 @@ function update(timestamp) {
           gamerMouse.style.filter = "none";
      }
 
-     if (totalChocolateEarned >= twoDofxmasUpgradeShowAt) {
+     if (totalChocolateEarned >= twoDofxmasUpgradeShowAt && chocolateElves > 0) {
           twoDofxmas.style.visibility = "visible";
      }
 
@@ -309,6 +353,16 @@ function update(timestamp) {
           twoDofxmas.style.filter = "brightness(50%) grayscale(100%)";
      } else {
           twoDofxmas.style.filter = "none";
+     }
+
+     if (dwarvesCount > 0) {
+          reinforcedPickaxes.style.visibility = "visible";
+     }
+
+     if (chocolateCount < reinforcedPickaxesUpgradeCost) {
+          reinforcedPickaxes.style.filter = "brightness(50%) grayscale(100%)";
+     } else {
+          reinforcedPickaxes.style.filter = "none";
      }
      
      // Make the building be a darker color if the player can't afford it, and normal color if they can with the text red.
@@ -393,6 +447,7 @@ goblins.addEventListener("click", buyGoblin);
 
 gamerMouse.addEventListener("click", buyGamerMouseUpgrade);
 twoDofxmas.addEventListener("click", buyTwoDofXmasUpgrade);
+reinforcedPickaxes.addEventListener("click", buyReinforcedPickaxesUpgrade);
 
 openStatsButton.addEventListener("click", openStats);
 closeStatsButton.addEventListener("click", closeStats);
